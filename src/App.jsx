@@ -17,7 +17,7 @@ function App() {
       setAudioSrc(`data:audio/mp3;base64,${base64}`);
     };
 
-    reader.readAsDataURL(file); // Faylni o'qish
+    reader.readAsDataURL(file);
   };
 
   return (
