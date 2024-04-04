@@ -5,30 +5,49 @@ const PlayerContext = createContext();
 export const ContextProvider = ({ children }) => {
     const [isPlay, setIsPlay] = useState(true);
     const [progressVal, setProgressVal] = useState(0);
-    const [isRotate, setIsRotate] = useState(true);
     const [audioSrc, setAudioSrc] = useState('');
+    const [isRepeat, setIsRepeat] = useState(false);
+    const [isMute, setIsMute] = useState(false);
+    const [volume, setVolume] = useState(0.5);
     const ref = useRef(null);
+
+    const [limit, setLimit] = useState({
+        start: '',
+        end: ''
+    });
+
+    const handleInputChange = (e) => {
+        setLimit((prevState) => ({
+            ...prevState,
+            [e.target.id]: e.target.value
+        }));
+    }
 
     // functions
     const PlayPause = () => {
-        ref && (isPlay ? ref.current.play() : ref.current.pause())
+        if (ref.current) {
+            if (isPlay) {
+                ref.current.play();
+                ref.current.currentTime = +limit.start || 0;
+            } else {
+                ref.current.pause();
+            }
+        }
         setIsPlay(!isPlay);
     };
 
     const updateTime = () => {
-        if (ref) {
+        if (ref.current) {
             const element = ref.current;
             setProgressVal((element.currentTime / element.duration) * 100);
+            if (element.currentTime > +limit.end && +limit.end) {
+                element.currentTime = +limit.start;
+            }
+
             if (element.currentTime === element.duration) {
-                setIsPlay(!isRotate);
-                isRotate && element.play();
+                setIsPlay(true)
             }
         }
-    }
-
-    const rotate = (e) => {
-        setIsRotate(!isRotate);
-        isRotate ? e.target.style.color = 'red' : e.target.style.color = 'white'
     }
 
     const handleFileChange = (event) => {
@@ -40,12 +59,24 @@ export const ContextProvider = ({ children }) => {
         };
 
         reader.readAsDataURL(file);
-
-        if (ref.current) {
-            ref.current.currentTime = 0;
-            reader.readAsDataURL(file);
-        }
     };
+
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    };
+
+    const mute = () => {
+        setIsMute(!isMute);
+        if (ref.current) {
+            isMute ? ref.current.volume = 1 : ref.current.volume = 0;
+        }
+    }
+
+    const controlVol = (e) => {
+        console.log(e.offsetWidth);
+    }
 
     return (
         <PlayerContext.Provider value={{
@@ -54,9 +85,17 @@ export const ContextProvider = ({ children }) => {
             PlayPause,
             updateTime,
             progressVal,
-            rotate,
             audioSrc,
             handleFileChange,
+            limit,
+            handleInputChange,
+            formatTime,
+            isRepeat,
+            setIsRepeat,
+            mute,
+            isMute,
+            volume,
+            controlVol,
         }}>
             {children}
         </PlayerContext.Provider>

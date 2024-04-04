@@ -2,7 +2,6 @@ import { usePlayerContext } from "../context/PlayerContext"
 
 function Audio() {
     const { ref, audioSrc, handleFileChange, updateTime } = usePlayerContext();
-
     return (
         <>
             <input onChange={handleFileChange} type="file" accept="audio/*" />
