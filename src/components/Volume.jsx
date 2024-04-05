@@ -10,7 +10,6 @@ function Volume() {
                     isMute ? <GrVolumeMute size={24} /> : <GrVolume size={24} />
                 }
             </button>
-            {/* <progress onClick={(e) => controlVol(e)} className="progress w-[100px] rounded-full cursor-pointer" value="0.5" max="1"></progress>  */}
         </>
     )
 }

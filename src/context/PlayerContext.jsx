@@ -8,7 +8,6 @@ export const ContextProvider = ({ children }) => {
     const [audioSrc, setAudioSrc] = useState('');
     const [isRepeat, setIsRepeat] = useState(false);
     const [isMute, setIsMute] = useState(false);
-    const [volume, setVolume] = useState(0.5);
     const ref = useRef(null);
 
     const [limit, setLimit] = useState({
@@ -28,7 +27,7 @@ export const ContextProvider = ({ children }) => {
         if (ref.current) {
             if (isPlay) {
                 ref.current.play();
-                ref.current.currentTime = +limit.start || 0;
+                ref.current.currentTime = +limit.start || ref.current.currentTime;
             } else {
                 ref.current.pause();
             }
@@ -74,8 +73,13 @@ export const ContextProvider = ({ children }) => {
         }
     }
 
-    const controlVol = (e) => {
-        console.log(e.offsetWidth);
+    // progressbar
+    const controlProgress = (e) => {
+        const width = e.target.offsetWidth;
+        const clickX = e.nativeEvent.offsetX;
+        if (ref.current) {
+            ref.current.currentTime = (clickX / width) * ref.current.duration;
+        }
     }
 
     return (
@@ -94,8 +98,7 @@ export const ContextProvider = ({ children }) => {
             setIsRepeat,
             mute,
             isMute,
-            volume,
-            controlVol,
+            controlProgress
         }}>
             {children}
         </PlayerContext.Provider>

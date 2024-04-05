@@ -6,9 +6,9 @@ function Progress() {
         progressVal,
         ref,
         formatTime,
+        controlProgress,
+        audioSrc
     } = usePlayerContext();
-
-
 
     return (
         <>
@@ -18,7 +18,13 @@ function Progress() {
                         ref.current && formatTime(ref.current.currentTime) || '00:00'
                     }
                 </span>
-                <progress className="progress w-full rounded-full cursor-pointer" value={progressVal} max="100"></progress>
+                <progress
+                    onClick={(e) => controlProgress(e)}
+                    className={`progress w-full rounded-full cursor-pointer ${!audioSrc && 'pointer-events-none'}`}
+                    value={progressVal}
+                    max="100"
+                >
+                </progress>
                 <span>
                     {
                         ref.current && formatTime(ref.current.duration) || '00:00'
@@ -26,7 +32,7 @@ function Progress() {
                 </span>
             </div>
             <div className="flex items-center gap-2">
-                <Volume/>
+                <Volume />
             </div>
         </>
     )
