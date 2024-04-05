@@ -2,6 +2,7 @@ import { RxPlay, RxPause } from "react-icons/rx";
 import { usePlayerContext } from "../context/PlayerContext";
 import Progress from "./Progress";
 import Repeat from './Repeat'
+import Audio from "./Audio";
 
 function Controllers() {
     const {
@@ -16,10 +17,12 @@ function Controllers() {
         <>
             <div className="flex items-center gap-6">
                 <Progress />
+                <Repeat />
             </div>
 
-            <div className="mt-3 flex items-center gap-3 justify-center">
-                <div className="flex items-center gap-3 mx-auto">
+            <div className="mt-5 flex items-center gap-3 justify-center flex-wrap">
+                <Audio />
+                <div className="flex items-center gap-3">
                     <label className="form-control w-full max-w-[100px]">
                         <input value={limit.start}
                             onChange={handleInputChange}
@@ -39,7 +42,6 @@ function Controllers() {
                             type="number" placeholder="End" className="input w-full" />
                     </label>
                 </div>
-                <Repeat />
             </div>
         </>
     )

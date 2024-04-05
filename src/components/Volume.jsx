@@ -2,7 +2,7 @@ import { usePlayerContext } from "../context/PlayerContext";
 import { GrVolume, GrVolumeMute } from "react-icons/gr";
 
 function Volume() {
-    const { mute, isMute, controlVol, volume } = usePlayerContext();
+    const { mute, isMute } = usePlayerContext();
     return (
         <>
             <button onClick={mute} className="cursor-pointer">

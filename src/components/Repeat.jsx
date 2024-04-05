@@ -1,12 +1,13 @@
 import React from 'react'
+import { BsRepeat, BsRepeat1 } from "react-icons/bs";
 import { usePlayerContext } from '../context/PlayerContext'
 
 function Repeat() {
-  const { isRepeat, setIsRepeat } = usePlayerContext();
+  const { isRepeat, repeat } = usePlayerContext();
   return (
-    <div onClick={() => setIsRepeat(!isRepeat)} className="px-3 text-lg cursor-pointer select-none">
-      Repeat {isRepeat ? '-1' : ''}
-    </div>
+    <button onClick={repeat}>
+      {isRepeat ? <BsRepeat1 size={26} /> : <BsRepeat size={26} />}
+    </button>
   )
 }
 

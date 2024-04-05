@@ -3,12 +3,12 @@ import { createContext, useContext, useRef, useState } from "react";
 const PlayerContext = createContext();
 
 export const ContextProvider = ({ children }) => {
+    const ref = useRef(null);
     const [isPlay, setIsPlay] = useState(true);
     const [progressVal, setProgressVal] = useState(0);
     const [audioSrc, setAudioSrc] = useState('');
     const [isRepeat, setIsRepeat] = useState(false);
     const [isMute, setIsMute] = useState(false);
-    const ref = useRef(null);
 
     const [limit, setLimit] = useState({
         start: '',
@@ -24,26 +24,27 @@ export const ContextProvider = ({ children }) => {
 
     // functions
     const PlayPause = () => {
-        if (ref.current) {
+        const podcast = ref.current;
+        if (podcast) {
             if (isPlay) {
-                ref.current.play();
-                ref.current.currentTime = +limit.start || ref.current.currentTime;
+                podcast.play();
+                podcast.currentTime = +limit.start || podcast.currentTime;
             } else {
-                ref.current.pause();
+                podcast.pause();
             }
         }
         setIsPlay(!isPlay);
     };
 
     const updateTime = () => {
-        if (ref.current) {
-            const element = ref.current;
-            setProgressVal((element.currentTime / element.duration) * 100);
-            if (element.currentTime > +limit.end && +limit.end) {
-                element.currentTime = +limit.start;
+        const podcast = ref.current;
+        if (podcast) {
+            setProgressVal((podcast.currentTime / podcast.duration) * 100);
+            if (podcast.currentTime > +limit.end && +limit.end) {
+                podcast.currentTime = +limit.start;
             }
 
-            if (element.currentTime === element.duration) {
+            if (podcast.currentTime === podcast.duration) {
                 setIsPlay(true)
             }
         }
@@ -68,17 +69,19 @@ export const ContextProvider = ({ children }) => {
 
     const mute = () => {
         setIsMute(!isMute);
-        if (ref.current) {
-            isMute ? ref.current.volume = 1 : ref.current.volume = 0;
-        }
+    }
+
+    const repeat = () => {
+        setIsRepeat(!isRepeat)
     }
 
     // progressbar
     const controlProgress = (e) => {
+        const podcast = ref.current;
         const width = e.target.offsetWidth;
         const clickX = e.nativeEvent.offsetX;
-        if (ref.current) {
-            ref.current.currentTime = (clickX / width) * ref.current.duration;
+        if (podcast) {
+            podcast.currentTime = (clickX / width) * podcast.duration;
         }
     }
 
@@ -95,7 +98,7 @@ export const ContextProvider = ({ children }) => {
             handleInputChange,
             formatTime,
             isRepeat,
-            setIsRepeat,
+            repeat,
             mute,
             isMute,
             controlProgress
