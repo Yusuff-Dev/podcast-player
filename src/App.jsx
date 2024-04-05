@@ -7,7 +7,7 @@ function App() {
         <div className="bg-[#1A1A1A] rounded-md shadow-lg text-lg overflow-hidden w-full">
           <textarea
             placeholder="Please drag and drop your text here!!!"
-            className="bg-inherit resize-none w-full h-full outline-none p-3 overflow-y-auto">
+            className="bg-inherit resize-none w-full md:w-1/2 mx-auto block h-full outline-none p-3 overflow-y-auto">
           </textarea>
         </div>
 
